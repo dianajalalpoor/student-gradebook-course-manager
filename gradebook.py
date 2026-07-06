@@ -1,0 +1,131 @@
+# Control the whole application and connects students, course, assessment, and grades
+from student import Student
+from course import Course
+
+
+class Gradebook:
+    def __init__(self, passing_grade):
+        self.students = {}
+        self.courses = {}
+        self.grades = {}
+        self.passing_grade = passing_grade
+    
+    def add_student(self, student):
+        self.students[student.student_id] = student  
+
+
+    def add_course(self, course):      
+        self.courses[course.get_course_code()]= course  
+
+
+    def enroll_student(self, student_id, course_code):
+        if student_id in self.students and course_code in self.courses:
+            course = self.courses[course_code]
+            course.add_student(student_id)
+
+    def add_assessment(self, course_code, assessment):
+        if course_code in self.courses:
+            course = self.courses[course_code]
+            course.add_assessment(assessment)               
+
+
+    def record_grade(self, student_id, course_code, assessment_title, score):
+        if student_id in self.students and course_code in self.courses:
+            course = self.courses[course_code]
+            assessment = course.find_assessment(assessment_title)
+
+            if assessment:
+                if student_id not in self.grades:
+                    self.grades[student_id] = {}
+
+                if course_code not in self.grades[student_id]:
+                    self.grades[student_id][course_code] = {}
+
+                self.grades[student_id][course_code][assessment_title] = score
+
+            else:
+                print("Assessment not found")           
+
+    
+    def calculate_average(self, student_id, course_code):
+        if student_id in self.students and course_code in self.courses:
+            assessments = self.grades[student_id][course_code]
+            course = self.courses[course_code]
+
+            total = 0
+
+            for title, score in assessments.items():
+                assessment = course.find_assessment(title)
+                percentage = (score / assessment.max_score) * 100
+                total += percentage
+
+            return total / len(assessments)
+        
+        return 0
+      
+
+    def show_report(self, student_id):
+        if student_id in self.students:
+            student = self.students[student_id]
+
+            if student_id in self.grades:
+                grades = self.grades[student_id]
+            else:
+                grades = {}
+
+            print("==================================")
+            print("          Student Report         ")
+            print("==================================")
+
+            print("Student ID:", student_id)
+            print("Student Name:", student.name)
+            print("Email:", student.email)
+
+            for course_code in grades:
+                course = self.courses[course_code]
+                print(f"course: {course.get_course_code()} - {course.get_course_name()}")
+
+                course_grades = grades[course_code]
+
+                for assessment, score in course_grades.items():
+                    assessment_obj = self.courses[course_code].find_assessment(assessment)
+                    percentage = (score / assessment_obj.max_score) * 100
+                    print(f"{assessment}: {score}/{assessment_obj.max_score} = {percentage:.0f}%")
+
+                average = self.calculate_average(student_id, course_code)
+                print(f"Average: {average:.2f}%")
+               
+                if average >= self.passing_grade:
+                    print("Result: Passed")
+                else:
+                    print("Result: Failed")
+
+
+    def search_student(self, keyword):
+        for student_id, student in self.students.items():
+
+            if student_id == keyword or student.name == keyword:
+                print("Found:", student.name, "-", student_id)
+                return student
+
+        print("Student not found")        
+        return None
+
+
+    def delete_student(self, student_id):
+        if student_id in self.students:
+            for course in self.courses.values():
+                if student_id in course.students:
+                    course.students.remove(student_id)
+
+            del self.grades[student_id]
+            del self.students[student_id]
+
+
+    def get_result(self, average):
+        if average >= self.passing_grade:
+            return "Passed"
+        
+        else:
+            return "Failed"
+

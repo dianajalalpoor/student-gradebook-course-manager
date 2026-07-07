@@ -19,6 +19,15 @@ class Course:
             self.__students.append(student_id)
 
 
+    def get_students(self):
+        return self.__students
+    
+    
+    def remove_student(self, student_id):
+        if student_id in self.__students:
+            self.__students.remove(student_id)
+            
+
     def add_assessment(self, assessment):
         self.__assessments.append(assessment)
 

@@ -21,7 +21,13 @@ class Gradebook:
     def enroll_student(self, student_id, course_code):
         if student_id in self.students and course_code in self.courses:
             course = self.courses[course_code]
+            student = self.students[student_id]
+
             course.add_student(student_id)
+            student.enroll_course(course_code)
+
+        else:
+            print("Student ID or course code not found")
 
     def add_assessment(self, course_code, assessment):
         if course_code in self.courses:
@@ -35,6 +41,14 @@ class Gradebook:
             assessment = course.find_assessment(assessment_title)
 
             if assessment:
+                if score < 0:
+                    print("Grade cannot be negative")
+                    return
+
+                if score > assessment.max_score:
+                    print("Grade cannot be higher than maximum score")
+                    return
+
                 if student_id not in self.grades:
                     self.grades[student_id] = {}
 
@@ -42,9 +56,13 @@ class Gradebook:
                     self.grades[student_id][course_code] = {}
 
                 self.grades[student_id][course_code][assessment_title] = score
+                print("Grade record successfuly")
 
             else:
-                print("Assessment not found")           
+                print("Assessment not found")   
+
+        else:
+            print("Student ID or course code not found")        
 
     
     def calculate_average(self, student_id, course_code):
@@ -104,7 +122,7 @@ class Gradebook:
     def search_student(self, keyword):
         for student_id, student in self.students.items():
 
-            if student_id == keyword or student.name == keyword:
+            if student_id == keyword or student.name.lower() == keyword.lower():
                 print("Found:", student.name, "-", student_id)
                 return student
 
@@ -115,11 +133,16 @@ class Gradebook:
     def delete_student(self, student_id):
         if student_id in self.students:
             for course in self.courses.values():
-                if student_id in course.students:
-                    course.students.remove(student_id)
+                course.remove_student(student_id)
+            if student_id in self.grades:
+                del self.grades[student_id]
 
-            del self.grades[student_id]
             del self.students[student_id]
+
+            print("Student deleted successfully")
+
+        else:
+            print("Student not found")
 
 
     def get_result(self, average):

@@ -39,6 +39,10 @@ class Course:
         
         print("Not found")
         return None
+    
+
+    def get_assessment_count(self):
+        return len(self.__assessments)
 
 
     def display_info(self):

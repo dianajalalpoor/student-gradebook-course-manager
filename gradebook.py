@@ -112,6 +112,9 @@ class Gradebook:
 
                 average = self.calculate_average(student_id, course_code)
                 print(f"Average: {average:.2f}%")
+
+                letter = self.get_letter_grade(average)
+                print("Leetter grade:", letter)
                
                 if average >= self.passing_grade:
                     print("Result: Passed")
@@ -144,6 +147,36 @@ class Gradebook:
         else:
             print("Student not found")
 
+    # Creative feacher - Dashboard: show total students, courses and assessment.
+    def show_dashboard(self):
+        print("------Dashbord------")
+        print("Total student:", len(self.students))
+        print("Total course:", len(self.courses))
+
+        total_assessment = 0
+
+        for course in self.courses.values():
+            total_assessment += course.get_assessment_count()
+        print("Total assessments:", total_assessment)
+
+
+    # reative feacher - Leeter grade: Converts average scores into A, B, C, D and F.
+    def get_letter_grade(self, average):
+        if average >= 90:
+            return "A"
+        
+        elif average >= 80:
+            return "B"
+        
+        elif average >= 70:
+            return "C"
+        
+        elif average >= 60:
+            return "D"
+        
+        else:
+            return "F"
+        
 
     def get_result(self, average):
         if average >= self.passing_grade:

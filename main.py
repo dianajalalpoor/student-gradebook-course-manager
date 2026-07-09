@@ -37,7 +37,8 @@ while continue_menu:
     print("8. View student report")
     print("9. Search student")
     print("10. Delet student")
-    print("11. Dashbord")
+    print("11. Ubdate student")
+    print("12. Dashbord")
     print("0. Exit")
 
 
@@ -85,6 +86,12 @@ while continue_menu:
         gradebook.delete_student(student_id)
 
     elif choice == 11:
+        student_id = input("Enter studend ID: ")
+        name = input("Enter new name: ")
+        email = input("Enter new email: ")
+        gradebook.ubdate_student(student_id, name, email)
+
+    elif choice == 12:
         gradebook.show_dashboard()
 
     elif choice == 0:

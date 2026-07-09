@@ -17,9 +17,11 @@ class Student:
     def set_email(self, email):
         if "@" in email and "." in email:
             self.email = email
+            return True
 
         else:
             print("invalid email!")
+            return False
         
     def enroll_course(self, course_code):
         if course_code not in self.courses:

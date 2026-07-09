@@ -109,12 +109,13 @@ class Gradebook:
                     assessment_obj = self.courses[course_code].find_assessment(assessment)
                     percentage = (score / assessment_obj.max_score) * 100
                     print(f"{assessment}: {score}/{assessment_obj.max_score} = {percentage:.0f}%")
+                    print(assessment_obj.grade_message(score))
 
                 average = self.calculate_average(student_id, course_code)
                 print(f"Average: {average:.2f}%")
 
                 letter = self.get_letter_grade(average)
-                print("Leetter grade:", letter)
+                print("Letter grade:", letter)
                
                 if average >= self.passing_grade:
                     print("Result: Passed")
@@ -146,6 +147,23 @@ class Gradebook:
 
         else:
             print("Student not found")
+
+
+    def ubdate_student(self, student_id, name, email):
+        if student_id in self.students:
+            student = self.students[student_id]
+
+            student.name = name
+            if student.set_email(email):
+                print("Student ubdated successfully")
+
+            else:
+                print("Ubdate failed")
+
+        else:
+            print("Student not found")
+
+
 
     # Creative feacher - Dashboard: show total students, courses and assessment.
     def show_dashboard(self):

@@ -12,13 +12,13 @@ class Assessment:
 
     def grade_message(self, score):
         if score >= 80:
-            return "Exellent!"
+            return "Exellent"
         
         elif score >= 50:
-            return "good!"
+            return "good"
         
         else:
-            return "Need more effort!"
+            return "Need more effort"
         
 
     def display_info(self):

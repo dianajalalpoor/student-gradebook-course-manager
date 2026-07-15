@@ -32,7 +32,7 @@ while continue_menu:
     print("3. Add course")
     print("4. View courses")
     print("5. Enroll student in course")
-    print("6. Add assignment")
+    print("6. Add assessment")
     print("7. Record grade")
     print("8. View student report")
     print("9. Search student")
